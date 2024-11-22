@@ -12,6 +12,7 @@ import os
 from neo4j import GraphDatabase, Result
 from langchain_community.vectorstores import Neo4jVector
 
+from langchain_huggingface import HuggingFaceEndpoint
 
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
@@ -33,4 +34,30 @@ st.markdown("Q&A from private pdf documents")
 # messages stores chat history for Streamlit
 if "session_id" not in st.session_state:
     st.session_state.session_id = str(random.randint(1,1000))
+
+store = {}
+#config = {"configurable": {"session_id": "abc2"}}
+config = {"configurable": {"session_id": st.session_state.session_id}}
+
+def get_session_history(session_id: str) -> BaseChatMessageHistory:
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+    return store[session_id]
+
+def init_conversationchain():
+    repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+
+    #llm = HuggingFaceEndpoint(
+    #    repo_id=repo_id,
+    #    max_length=None, #1000,
+    #    temperature=0, #0.25,
+    #    huggingfacehub_api_token=os.environ["HUGGINGFACEHUB_API_TOKEN"],
+    #)
+
+# Re-initialize the chat
+def new_chat():
+    return
+
+# Add a button to start a new chat
+st.sidebar.button("New Chat", on_click=new_chat, type='primary')
 
