@@ -1,7 +1,9 @@
 # Retrieval-Augmented Generation(RAG) framework using LLM zephyr-7b-beta/ Mistral-7B-Instruct-v0.2
 ### Blog Post [here](https://medium.com/@tamoghna.bec/building-a-smart-chatbot-with-your-private-documents-pdf-using-langchain-faiss-and-open-source-4b93c40ef303).
 
-## Test the Streamlit Application [here](https://ragchatbot-ekpkt4ch4solysyojbq2yp.streamlit.app/). Streamlit app [code](app_streamlit_rag.py). 
+## Test the Streamlit Application [here](https://ragchatbot-ekpkt4ch4solysyojbq2yp.streamlit.app/). Streamlit app [code](app_streamlit_rag.py).
+* Conversational chatbot
+* Uses LLM endpoint from huggingface hub.
 
 ### Naive RAG
 * Vector Store: [FAISS](https://faiss.ai/index.html)
