@@ -65,14 +65,6 @@ def init_conversationchain():
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
-    template = """Question: {question}
-
-    Answer: Let's think step by step."""
-
-    local_prompt = PromptTemplate.from_template(template)
-
-    llm_chain = local_prompt | llm
-
     system_prompt = (
         "You are an assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
