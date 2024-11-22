@@ -1,4 +1,4 @@
-# Retrieval-Augmented Generation(RAG) framework to generate answers from local knowledge base using Open source LLM (zephyr-7b-beta/ Mistral-7B-Instruct-v0.2)
+# Retrieval-Augmented Generation(RAG) framework using LLM zephyr-7b-beta/ Mistral-7B-Instruct-v0.2
 Blog Post [here](https://medium.com/@tamoghna.bec/building-a-smart-chatbot-with-your-private-documents-pdf-using-langchain-faiss-and-open-source-4b93c40ef303).
 
 ## Naive RAG
