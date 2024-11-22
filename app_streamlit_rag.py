@@ -141,7 +141,7 @@ def generate_response(conv_chain, input_text):
     #return conv_chain.invoke({"input": input_text},config=config,)["answer"]
     #return conv_chain.invoke({"question": input_text})
     #return conv_chain.invoke({"input": input_text})
-    return conv_chain.invoke({"input": input_text},config=config,)
+    return conv_chain.invoke({"input": input_text},config=config,)["answer"]
 
 # Re-initialize the chat
 def new_chat():
