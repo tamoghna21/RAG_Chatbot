@@ -24,3 +24,13 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 
+# Set Streamlit page configuration
+st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1 from HuggingfaceHub ', layout='wide')
+st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1 from HuggingfaceHub")
+
+st.markdown("Q&A from private pdf documents")
+
+# messages stores chat history for Streamlit
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(random.randint(1,1000))
+
