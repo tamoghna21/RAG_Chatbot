@@ -66,12 +66,38 @@ def init_conversationchain():
     local_prompt = PromptTemplate.from_template(template)
 
     llm_chain = local_prompt | llm
-    return llm_chain
+
+    system_prompt = (
+    "You are an assistant for question-answering tasks. Generate an human understandable answer in proper english for the Question."
+    "\n\n"
+    )
+
+    qa_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+    )
+
+    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+
+    conversational_rag_chain  = RunnableWithMessageHistory(
+        question_answer_chain, 
+        get_session_history,
+        input_messages_key="input",
+        history_messages_key="chat_history",
+        output_messages_key="result"
+    )
+
+    #return llm_chain
+    return conversational_rag_chain
 
 def generate_response(conv_chain, input_text):
     #return conv_chain.invoke(input=input_text)['result']
     #return conv_chain.invoke({"input": input_text},config=config,)["answer"]
-    return conv_chain.invoke({"question": input_text})
+    #return conv_chain.invoke({"question": input_text})
+    return conv_chain.invoke({"input": input_text})
 
 # Re-initialize the chat
 def new_chat():
