@@ -21,13 +21,18 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 
+HUGGINGFACEHUB_API_TOKEN = st.secrets["MYHUGGINGFACEHUB_AP"]
+
+INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.1 with RAG helper. Ask Questions."
+
 # Set Streamlit page configuration
-st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1 from HuggingfaceHub ', layout='wide')
-st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1 from HuggingfaceHub")
+st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1', layout='wide')
+st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1")
 
 st.markdown("Q&A from private pdf documents")
 
@@ -47,17 +52,58 @@ def get_session_history(session_id: str) -> BaseChatMessageHistory:
 def init_conversationchain():
     repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
-    #llm = HuggingFaceEndpoint(
-    #    repo_id=repo_id,
-    #    max_length=None, #1000,
-    #    temperature=0, #0.25,
-    #    huggingfacehub_api_token=os.environ["HUGGINGFACEHUB_API_TOKEN"],
-    #)
+    llm = HuggingFaceEndpoint(
+        repo_id=repo_id,
+        max_length=None, #1000,
+        temperature=0, #0.25,
+        huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
+    )
+
+    template = """Question: {question}
+
+    Answer: Let's think step by step."""
+
+    local_prompt = PromptTemplate.from_template(template)
+
+    llm_chain = local_prompt | llm
+    return llm_chain
+
+def generate_response(conv_chain, input_text):
+    #return conv_chain.invoke(input=input_text)['result']
+    #return conv_chain.invoke({"input": input_text},config=config,)["answer"]
+    return conv_chain.invoke({"question": input_text})
 
 # Re-initialize the chat
 def new_chat():
-    return
+    st.session_state.session_id = str(random.randint(1,1000))
+    st.session_state.messages = []
 
 # Add a button to start a new chat
 st.sidebar.button("New Chat", on_click=new_chat, type='primary')
+
+# Initialize the chat
+if "rag_chain" not in st.session_state:
+    st.session_state["rag_chain"] = init_conversationchain()
+
+# messages stores chat history for Streamlit
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display chat messages
+with st.chat_message("assistant"):
+    st.markdown(INIT_MESSAGE)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input():
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        llm_output = generate_response(st.session_state["rag_chain"], prompt)
+        response = st.markdown(llm_output)
+    
+    st.session_state.messages.append({"role": "assistant", "content": llm_output})
 
