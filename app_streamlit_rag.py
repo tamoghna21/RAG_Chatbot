@@ -26,6 +26,12 @@ from langchain_core.prompts import PromptTemplate
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 
+from langchain.retrievers import ContextualCompressionRetriever
+from ragatouille import RAGPretrainedModel #For the Re Ranker
+
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+
 HUGGINGFACEHUB_API_TOKEN = st.secrets["MYHUGGINGFACEHUB_AP"]
 
 INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.1 with RAG helper. Ask Questions."
@@ -68,8 +74,13 @@ def init_conversationchain():
     llm_chain = local_prompt | llm
 
     system_prompt = (
-    "You are an assistant for question-answering tasks. Generate an human understandable answer in proper english for the Question."
-    "\n\n"
+        "You are an assistant for question-answering tasks. "
+        "Use the following pieces of retrieved context to answer "
+        "the question. If you don't know the answer, say that you "
+        "don't know. Use three sentences maximum and keep the "
+        "answer concise."
+        "\n\n"
+        "{context}"
     )
 
     qa_prompt = ChatPromptTemplate.from_messages(
@@ -82,8 +93,48 @@ def init_conversationchain():
 
     question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
 
+    EMBEDDING_MODEL_NAME = "thenlper/gte-small"
+    embeddings = HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME,
+        #model_kwargs={"device": "cuda"},
+        encode_kwargs={"normalize_embeddings": True},  # Set `True` for cosine similarity
+    )
+
+    db_VECTOR = FAISS.load_local("faiss_index", embeddings,allow_dangerous_deserialization=True)
+
+    retriever = db_VECTOR.as_retriever(
+        search_type="similarity",
+        search_kwargs={'k': 30})
+
+    RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
+
+    compression_retriever = ContextualCompressionRetriever(
+    base_compressor=RERANKER.as_langchain_document_compressor(), base_retriever=retriever)
+
+    contextualize_q_system_prompt = (
+        "Given a chat history and the latest user question "
+        "which might reference context in the chat history, "
+        "formulate a standalone question which can be understood "
+        "without the chat history. Do NOT answer the question, "
+        "just reformulate it if needed and otherwise return it as is."
+    )
+
+    contextualize_q_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", contextualize_q_system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ]
+)
+
+    history_aware_retriever = create_history_aware_retriever(
+        llm, compression_retriever, contextualize_q_prompt
+    )
+
+    rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
     conversational_rag_chain  = RunnableWithMessageHistory(
-        question_answer_chain, 
+        rag_chain, 
         get_session_history,
         input_messages_key="input",
         history_messages_key="chat_history",
