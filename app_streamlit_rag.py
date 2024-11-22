@@ -32,7 +32,7 @@ INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.1 with RAG helper. Ask Questions.
 st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1', layout='wide')
 st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1")
 
-st.markdown("Q&A from private pdf documents")
+st.markdown("Q&A from private pdf documents (Federal Open Market Committee (FOMC) [meeting documents](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) for the years 2020-2023)")
 
 # messages stores chat history for Streamlit
 if "session_id" not in st.session_state:
