@@ -2,7 +2,7 @@
 ### Blog Post [here](https://medium.com/@tamoghna.bec/building-a-smart-chatbot-with-your-private-documents-pdf-using-langchain-faiss-and-open-source-4b93c40ef303).
 
 ## Test the Streamlit Application [here](https://ragchatbot-ekpkt4ch4solysyojbq2yp.streamlit.app/). Streamlit app [code](app_streamlit_rag.py).
-* Conversational chatbot
+* LLM powered Conversational chatbot on private documents
 * Uses LLM endpoint from huggingface hub
 
 ### RAG Details:
