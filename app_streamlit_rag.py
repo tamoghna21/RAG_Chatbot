@@ -53,7 +53,7 @@ def init_conversationchain():
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
         max_length=None, #1000,
-        temperature=0.05, #0.25,
+        temperature=0.2, #0.25,
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
@@ -88,7 +88,7 @@ def init_conversationchain():
 
     retriever = db_VECTOR.as_retriever(
         search_type="similarity",
-        search_kwargs={'k': 15})
+        search_kwargs={'k': 10})
 
     RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
 
