@@ -55,7 +55,7 @@ def init_conversationchain():
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
         max_length=None, #1000,
-        temperature=0, #0.25,
+        temperature=0.1, #0.25,
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
