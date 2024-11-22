@@ -137,7 +137,10 @@ def new_chat():
     st.session_state.messages = []
 
 # Add a button to start a new chat
-st.sidebar.button("New Chat", on_click=new_chat, type='primary')
+with st.sidebar:
+    st.button("New Chat", on_click=new_chat, type='primary')
+    st.write("Created by: Tamoghna Das")
+    st.write("Github [link](https://github.com/tamoghna21/RAG_Chatbot/tree/main)")
 
 # Initialize the chat
 if "rag_chain" not in st.session_state:
