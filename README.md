@@ -3,9 +3,9 @@
 
 ## Test the Streamlit Application [here](https://ragchatbot-ekpkt4ch4solysyojbq2yp.streamlit.app/). Streamlit app [code](app_streamlit_rag.py).
 * Conversational chatbot
-* Uses LLM endpoint from huggingface hub.
+* Uses LLM endpoint from huggingface hub
 
-### Naive RAG
+### RAG Details:
 * Vector Store: [FAISS](https://faiss.ai/index.html)
 * Local Knowledge Base: Federal Open Market Committee (FOMC) [meeting documents](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) for the years 2020-2023
 * LLM : [HuggingFaceH4/zephyr-7b-beta](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) & [Mistral-7B-Instruct-v0.2](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2)
