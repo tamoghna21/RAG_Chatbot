@@ -60,8 +60,8 @@ def init_conversationchain():
     system_prompt = (
         "You are an assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
-        "the question. If you don't know the answer, say that you "
-        "don't know. Use three sentences maximum and keep the "
+        "the question. If context does not have information specific to the Question, then do not answer, say that the "
+        "relevant information is not present in the retrieved context. Use three sentences maximum and keep the "
         "answer concise."
         "\n\n"
         "{context}"
@@ -88,7 +88,7 @@ def init_conversationchain():
 
     retriever = db_VECTOR.as_retriever(
         search_type="similarity",
-        search_kwargs={'k': 30})
+        search_kwargs={'k': 10})
 
     RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
 
