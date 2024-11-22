@@ -1,4 +1,4 @@
-torch
+streamlit
 neo4j
 langchain
 langchain_community
