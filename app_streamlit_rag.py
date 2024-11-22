@@ -88,7 +88,7 @@ def init_conversationchain():
 
     retriever = db_VECTOR.as_retriever(
         search_type="similarity",
-        search_kwargs={'k': 10})
+        search_kwargs={'k': 15})
 
     RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
 
