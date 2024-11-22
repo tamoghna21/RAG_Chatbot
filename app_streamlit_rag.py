@@ -26,11 +26,11 @@ from langchain.embeddings import HuggingFaceEmbeddings
 
 HUGGINGFACEHUB_API_TOKEN = st.secrets["MYHUGGINGFACEHUB_AP"]
 
-INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.1 with RAG helper. Ask Questions."
+INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.2 with RAG helper. Ask Questions."
 
 # Set Streamlit page configuration
-st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1', layout='wide')
-st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.1")
+st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.2', layout='wide')
+st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.2")
 
 st.markdown("Q&A from private pdf documents (Federal Open Market Committee (FOMC) [meeting documents](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) for the years 2020-2023)")
 
@@ -53,7 +53,7 @@ def init_conversationchain():
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
         max_length=None, #1000,
-        temperature=0.1, #0.25,
+        temperature=0.05, #0.25,
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
