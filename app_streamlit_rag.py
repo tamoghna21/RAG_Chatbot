@@ -129,7 +129,7 @@ def init_conversationchain():
     return conversational_rag_chain
 
 def generate_response(conv_chain, input_text):
-    return conv_chain.invoke({"input": input_text},config=config,)["answer"]["Assistant"]
+    return conv_chain.invoke({"input": input_text},config=config,)["answer"]
 
 # Re-initialize the chat
 def new_chat():
