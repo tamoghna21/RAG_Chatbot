@@ -55,7 +55,7 @@ def init_conversationchain():
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
         #max_length=None, #1000,
-        max_new_tokens=None, #1000,
+        max_new_tokens=1000,
         #temperature=0.2, #0.25,
         do_sample=False,
         repetition_penalty=1.03,
