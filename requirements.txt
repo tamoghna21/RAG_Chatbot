@@ -4,4 +4,5 @@ langchain
 langchain_community
 langchain_huggingface
 huggingface_hub
+psutil
 ragatouille
