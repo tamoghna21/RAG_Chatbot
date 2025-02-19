@@ -5,7 +5,8 @@
 import random
 import streamlit as st
 
-from langchain_huggingface import HuggingFaceEndpoint
+#from langchain_huggingface import HuggingFaceEndpoint
+from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint
 
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
@@ -26,7 +27,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 
 HUGGINGFACEHUB_API_TOKEN = st.secrets["MYHUGGINGFACEHUB_AP"]
 
-INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.2 with RAG helper. Ask Questions."
+INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.3 with RAG helper. Ask Questions."
 
 # Set Streamlit page configuration
 st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.2', layout='wide')
@@ -48,14 +49,20 @@ def get_session_history(session_id: str) -> BaseChatMessageHistory:
     return store[session_id]
 
 def init_conversationchain():
-    repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+    #repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+    repo_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
-        max_length=None, #1000,
-        temperature=0.2, #0.25,
+        #max_length=None, #1000,
+        max_new_tokens=None, #1000,
+        #temperature=0.2, #0.25,
+        do_sample=False,
+        repetition_penalty=1.03,
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
+
+    chat_model = ChatHuggingFace(llm=llm)
 
     system_prompt = (
         "You are an assistant for question-answering tasks. "
@@ -75,7 +82,8 @@ def init_conversationchain():
     ]
     )
 
-    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+    #question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+    question_answer_chain = create_stuff_documents_chain(chat_model, qa_prompt)
 
     EMBEDDING_MODEL_NAME = "thenlper/gte-small"
     embeddings = HuggingFaceEmbeddings(
@@ -112,7 +120,8 @@ def init_conversationchain():
 )
 
     history_aware_retriever = create_history_aware_retriever(
-        llm, compression_retriever, contextualize_q_prompt
+        #llm, compression_retriever, contextualize_q_prompt
+        chat_model, compression_retriever, contextualize_q_prompt
     )
 
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
