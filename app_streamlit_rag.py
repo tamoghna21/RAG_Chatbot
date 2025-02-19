@@ -31,7 +31,7 @@ INIT_MESSAGE = "Hi! I'm Mistral-7B-Instruct-v0.3 with RAG helper. Ask Questions.
 
 # Set Streamlit page configuration
 st.set_page_config(page_title='🤖 RAG Chatbot with Mistral-7B-Instruct-v0.2', layout='wide')
-st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.2")
+st.title("🤖 RAG Chatbot with Mistral-7B-Instruct-v0.3")
 
 st.markdown("Q&A from private pdf documents (Federal Open Market Committee (FOMC) [meeting documents](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) for the years 2020-2023)")
 
@@ -62,8 +62,7 @@ def init_conversationchain():
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
-    #chat_model = ChatHuggingFace(llm=llm)
-
+    
     system_prompt = (
         "You are an assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
