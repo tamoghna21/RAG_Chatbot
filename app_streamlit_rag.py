@@ -54,15 +54,15 @@ def init_conversationchain():
 
     llm = HuggingFaceEndpoint(
         repo_id=repo_id,
-        #max_length=None, #1000,
-        max_new_tokens=1000,
-        #temperature=0.2, #0.25,
-        do_sample=False,
-        repetition_penalty=1.03,
+        max_length=None, #1000,
+        #max_new_tokens=1000,
+        temperature=0.2, #0.25,
+        #do_sample=False,
+        #repetition_penalty=1.03,
         huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
     )
 
-    chat_model = ChatHuggingFace(llm=llm)
+    #chat_model = ChatHuggingFace(llm=llm)
 
     system_prompt = (
         "You are an assistant for question-answering tasks. "
@@ -82,8 +82,8 @@ def init_conversationchain():
     ]
     )
 
-    #question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
-    question_answer_chain = create_stuff_documents_chain(chat_model, qa_prompt)
+    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+    #question_answer_chain = create_stuff_documents_chain(chat_model, qa_prompt)
 
     EMBEDDING_MODEL_NAME = "thenlper/gte-small"
     embeddings = HuggingFaceEmbeddings(
@@ -120,8 +120,8 @@ def init_conversationchain():
 )
 
     history_aware_retriever = create_history_aware_retriever(
-        #llm, compression_retriever, contextualize_q_prompt
-        chat_model, compression_retriever, contextualize_q_prompt
+        llm, compression_retriever, contextualize_q_prompt
+        #chat_model, compression_retriever, contextualize_q_prompt
     )
 
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
