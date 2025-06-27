@@ -6,4 +6,3 @@ langchain_huggingface
 huggingface_hub
 psutil
 ragatouille==0.0.9
-transformers==4.49.0
