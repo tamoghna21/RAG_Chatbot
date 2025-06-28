@@ -22,7 +22,7 @@ from langchain_core.prompts import MessagesPlaceholder
 #from langchain.retrievers import ContextualCompressionRetriever
 #from ragatouille import RAGPretrainedModel #For the Re Ranker
 
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 
 HUGGINGFACEHUB_API_TOKEN = st.secrets["MYHUGGINGFACEHUB_AP"]
