@@ -1,7 +1,5 @@
 streamlit==1.46.0
-langchain_community
-langchain_huggingface
-huggingface_hub
-psutil
+langchain_huggingface==0.3.0
+langchain_community==0.3.26
 ragatouille==0.0.9
 transformers==4.48.0
