@@ -19,8 +19,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 
-from langchain.retrievers import ContextualCompressionRetriever
-from ragatouille import RAGPretrainedModel #For the Re Ranker
+#from langchain.retrievers import ContextualCompressionRetriever
+#from ragatouille import RAGPretrainedModel #For the Re Ranker
 
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -97,10 +97,10 @@ def init_conversationchain():
         search_type="similarity",
         search_kwargs={'k': 10})
 
-    RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
+    #RERANKER = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
 
-    compression_retriever = ContextualCompressionRetriever(
-    base_compressor=RERANKER.as_langchain_document_compressor(), base_retriever=retriever)
+    #compression_retriever = ContextualCompressionRetriever(
+    #base_compressor=RERANKER.as_langchain_document_compressor(), base_retriever=retriever)
 
     contextualize_q_system_prompt = (
         "Given a chat history and the latest user question "
@@ -119,7 +119,8 @@ def init_conversationchain():
 )
 
     history_aware_retriever = create_history_aware_retriever(
-        llm, compression_retriever, contextualize_q_prompt
+        llm, retriever, contextualize_q_prompt
+        #llm, compression_retriever, contextualize_q_prompt
         #chat_model, compression_retriever, contextualize_q_prompt
     )
 
